@@ -36,15 +36,32 @@ export default {
   },
   created() {
     this.productList.forEach(product => {
-      product.available = product.quantity > 0;
-    })
-  }
+      product.available = product.quantity > 1;
+    });
+  },
+  methods: {
+    updateProduct(data) {
+      this.getLeftOvers();
+      this.productList.forEach(product => {
+        if (product === data.searchProduct) {
+          product.quantity = data.newQuantity;
+          product.available = data.newAvailable;
+        }
+      })
+    }, getLeftOvers() {
+      this.productList.forEach(product => {
+        product.available = product.quantity > 1;
+      });
+    },
+  },
+  computed: {}
 }
 </script>
 
 <template>
   <div>
-    <ProductDetails v-for="(item,index) in this.productList" :key="index" :product="item"></ProductDetails>
+    <ProductDetails v-for="(item,index) in this.productList" :key="index" :product="item"
+                    @dataQuantityUpdate="updateProduct"></ProductDetails>
   </div>
 </template>
 
